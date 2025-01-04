@@ -10,7 +10,7 @@
         <h1 th:unless="${agendamento.id}">Tela de Agendamento</h1>    <!--Se o agendamento não tem id, então ele não existe e vai ser criado (aparece o texto Tela de Agendamento) -->
         
         <!--Criar o formulário de agendamento-->
-        <form th:action="@{/gravar}" method="POST" th:object="${agendamento}">
+        <form th:action="@{/gravar}" method="POST" th:object="${agendamento}">   <!--o atributo name: agendamento que está no AgendamentoController referencia o objeto da classe Agendamento e os valores que são passados nos campos abaixo, assim que submeter(enviar) vão ser passados nas variáveis da classe Agendamento.-->
             <p>Nome <input type="text" th:field="${agendamento.nome}"></p>
             <p>Telefone <input type="text" th:field="${agendamento.telefone}"></p>
             <p>Data <input type="date" name="data" th:field="${agendamento.data}"></p>
