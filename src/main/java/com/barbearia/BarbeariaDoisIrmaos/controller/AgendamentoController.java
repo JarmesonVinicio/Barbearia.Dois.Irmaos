@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller //precisa especificar que é uma classe de controler para que ele entenda que é de controle e não uma classe normal
 public class AgendamentoController {
@@ -59,12 +60,39 @@ public class AgendamentoController {
         return "redirect:/listagem"; //chamar a listagem dos agendamentos salvos
     }
     
-        @GetMapping("/listagem")
-        public String listaForm(Model model){
-            model.addAttribute("lista", listaAgendamentos);
-            return "listagem";
+    @GetMapping("/listagem")
+    public String listaForm(Model model){
+        
+        model.addAttribute("lista", listaAgendamentos);
+        return "listagem";
     }
     
+    @GetMapping("/alterar-agendamento")
+    public String alterarAgendamento(Model model, @RequestParam String id){
+        
+        Integer idAgendamento = Integer.parseInt(id);
+        model.addAttribute("agendamento", obtemAgendamentoPeloId(idAgendamento));
+        return "cadastro";
+    }
+    
+    @GetMapping("/excluir-agendamento")
+    public String excluirAgendamento(Model model, @RequestParam String id){
+        
+        Integer idAgendamento = Integer.parseInt(id);
+        listaAgendamentos.remove(obtemAgendamentoPeloId(idAgendamento));
+        return "redirect:/listagem"; //chamar a listagem dos agendamentos salvos
+    }
+        
+    public Agendamento obtemAgendamentoPeloId(Integer idAgendamento){
+        Agendamento registroEncontrado = new Agendamento();
+        for(Agendamento a: listaAgendamentos){
+            if(a.getId()== idAgendamento){
+                registroEncontrado = a;
+                break;
+            }
+        }
+        return registroEncontrado;
+    }       
     
     
     

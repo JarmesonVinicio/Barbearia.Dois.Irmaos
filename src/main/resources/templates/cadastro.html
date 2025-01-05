@@ -34,9 +34,9 @@
             
             <label for="barbeiro_responsavel">Barbeiro Responsável</label>
             <select name="barbeiro_responsavel" th:field="${agendamento.barbeiro_resp}">
-                <option value="sem_preferencia">Sem prefência</option>
-                <option value="carlos">Carlos</option>
-                <option value="plinio">Plínio</option>
+                <option value="Sem preferencia">Sem prefência</option>
+                <option value="Carlos">Carlos</option>
+                <option value="Plinio">Plínio</option>
             </select>
             
             <h2>Serviços:</h2>
@@ -50,6 +50,6 @@
             <p><input type="submit" value="Enviar"></p>
         </form>
         
-        <a th:href="@{/inicio}">Retornar</a>
+        <a th:href="@{/inicio}">Ir para a TELA INICIAL</a>
     </body>
 </html>
