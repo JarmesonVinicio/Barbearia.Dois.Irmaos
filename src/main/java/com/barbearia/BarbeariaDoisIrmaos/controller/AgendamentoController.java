@@ -1,8 +1,10 @@
 package com.barbearia.BarbeariaDoisIrmaos.controller;
 
 import com.barbearia.BarbeariaDoisIrmaos.model.Agendamento;
+import com.barbearia.BarbeariaDoisIrmaos.service.AgendamentoService;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -68,21 +70,21 @@ public class AgendamentoController {
     }
     
     
-    @GetMapping("/exibir")
-    public String mostrarDetalhes(Model model, @RequestParam String id){ //recebendo o id de fora(da listagem.html, quando o link for clicado)
-        Integer idAgendamento = Integer.parseInt(id); //convertendo o Sting id que veio de fora para inteiro)
-        
-        Agendamento registroEncontrado = new Agendamento(); //criando um objeto vazio de Agendamento, que será passado para o model.addAttribute
-        for(Agendamento a: listaAgendamentos){ //a representa a propria listaAgendamentos que esta preenchida com varios atributos de Agendamento(ex:nome,telefone, data,hora, etc)
-            if(a.getId()== idAgendamento){ //verificando se a cada ITERAÇÃO feita pelo looping for, se o ID da LISTA é o mesmo que foi recebido de fora(id da listagem, o do parametro)
-                registroEncontrado = a; //SE FOR O MESMO, ele pega todos os dados do objeto l naquela volta da iteração e atribui (preenche) no registroEncontrado. 
-                break; //encontrou, então para o loop e sai dele
-            }
-        }
-        
-        model.addAttribute("agendamento", registroEncontrado); //com o objeto encontrado ele atribui ao name do model para ser usado em outra pagina HTML.
-        return "exibir"; //chama o exibir.html
-    }
+//    @GetMapping("/exibir")
+//    public String mostrarDetalhes(Model model, @RequestParam String id){ //recebendo o id de fora(da listagem.html, quando o link for clicado)
+//        Integer idAgendamento = Integer.parseInt(id); //convertendo o Sting id que veio de fora para inteiro)
+//        
+//        Agendamento registroEncontrado = new Agendamento(); //criando um objeto vazio de Agendamento, que será passado para o model.addAttribute
+//        for(Agendamento a: listaAgendamentos){ //a representa a propria listaAgendamentos que esta preenchida com varios atributos de Agendamento(ex:nome,telefone, data,hora, etc)
+//            if(a.getId()== idAgendamento){ //verificando se a cada ITERAÇÃO feita pelo looping for, se o ID da LISTA é o mesmo que foi recebido de fora(id da listagem, o do parametro)
+//                registroEncontrado = a; //SE FOR O MESMO, ele pega todos os dados do objeto l naquela volta da iteração e atribui (preenche) no registroEncontrado. 
+//                break; //encontrou, então para o loop e sai dele
+//            }
+//        }
+//        
+//        model.addAttribute("agendamento", registroEncontrado); //com o objeto encontrado ele atribui ao name do model para ser usado em outra pagina HTML.
+//        return "exibir"; //chama o exibir.html
+//    }
     
     
     @GetMapping("/alterar-agendamento")
@@ -110,15 +112,33 @@ public class AgendamentoController {
             }
         }
         return registroEncontrado;
-    }       
+    }
+    ////////////////////////////////////////////////////////////////////////////////////
+    @Autowired
+    private AgendamentoService agendamentoService;
+//    //Metódo para exibir o valor total
+//    @GetMapping("/exibir")
+//    public String valorAgendamento (Agendamento agendamento, Model model){
+//        if(agendamento != null){
+//            double valorTotal = agendamentoService.calcularValor(agendamento);
+//            //adicionar o valor total ao modelo
+//            model.addAttribute("valorTotal", valorTotal);
+//        }
+//        return "exibir";
+//    }
     
     
-    
-    
-    
-    
-    
-    
+    @GetMapping("/exibir") 
+    public String mostrarDetalhes(@RequestParam String id, Model model) {
+        Integer idAgendamento = Integer.parseInt(id);
+        Agendamento registroEncontrado = obtemAgendamentoPeloId(idAgendamento);
+        if (registroEncontrado != null) {
+            model.addAttribute("agendamento", registroEncontrado);
+            double valorTotal = agendamentoService.calcularValor(registroEncontrado);
+            model.addAttribute("valorTotal", valorTotal);
+        }
+        return "exibir";
+    }
     
     
 }

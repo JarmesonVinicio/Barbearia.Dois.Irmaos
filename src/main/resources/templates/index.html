@@ -5,14 +5,19 @@
         <title>Barbearia Dois Irmãos</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--link pra carregar o CSS-->
+        <link rel="stylesheet" type="text/css" th:href="@{/css/estilo.css}"/>
     </head>
     <body>
         <h1>Barbearia Dois Irmãos</h1>
         
         <nav>
-            <a th:href="@{/inicio}">Início</a>
-            <a th:href="@{/cadastrar}">Agendar</a>
-            <a th:href="@{/listagem}">Lista de Agendamentos</a>
+            <a th:href="@{/inicio}"><input id="btn" type="button" value="Início"></a>
+            <a th:href="@{/cadastrar}"><input id="btn" type="button" value="Agendar"></a>
+            <a th:href="@{/listagem}"><input id="btn" type="button" value="Lista de Agendamentos"></a>
+            <a th:href="@{/listagem}"><input id="btn" type="button" value="Lista de Agendamentos"></a>
+            
+            
         </nav>
         
         <img th:src="@{/images/logo.png}" alt="alt"/>

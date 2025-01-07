@@ -1,0 +1,11 @@
+#btn{
+    font-size: x-large;
+    /*color: white;*/
+    border-radius: 2px;
+    /* width: fit-content; */
+    height: 50px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    background-color: darkturquoise;
+}
+
