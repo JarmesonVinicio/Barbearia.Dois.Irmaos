@@ -15,7 +15,25 @@ function validarServicos() {
     return true; // Permite o envio do formulário
 }
 
+
+//MÉTODO VERIFICADOR DE QUANTIDADE E PRECO UNITÁRIO QUE NÃO PODEM SER MENOR DO QUE ZERO
+function impedirValoresNegativos() {
+    let quantidade = document.getElementById("quantidade");
+    let precounitario = document.getElementById("precounitario");
     
+    let q = parseInt(quantidade.value);
+    let p = parseInt(precounitario.value);
+    console.log(q);
+    console.log(p);
+    
+    
+    if(q < 0 || p <= 0){ //quantidade não pode ser valor negativo e preco não pode ser zero e nem negativo
+        alert("Quantidade não pode ter valor menor do que zero\nPreço unitário não pode ter valor menor ou igual a zero");
+        return false; // Impede o envio do formulário
+    }
+    return true; // Permite o envio do formulário
+}    
+
 
 function calcularValor(){
     let valorCabelo = 0;

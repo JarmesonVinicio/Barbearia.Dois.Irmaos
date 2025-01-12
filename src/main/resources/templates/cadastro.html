@@ -4,55 +4,62 @@
         <title>Pagina de Agendamento</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--link pra carregar o CSS-->
+        <link rel="stylesheet" type="text/css" th:href="@{/css/estilo.css}"/>
     </head>
-    <body>
-        <h1 th:if="${agendamento.id}">Editar Agendamento</h1>       <!--Se o agendamento tem id(existe), vai ser alteração (aparece o texto: Editar Agendamento)-->
-        <h1 th:unless="${agendamento.id}">Tela de Agendamento</h1>    <!--Se o agendamento não tem id, então ele não existe e vai ser criado (aparece o texto Tela de Agendamento) -->
+    <body class="pagina-cadastro">
+        <div class="imagem-multiplicada">
+        </div>
         
-        <!--Criar o formulário de agendamento-->
-        <form onsubmit="return validarServicos()" th:action="@{/gravar}" method="POST" th:object="${agendamento}">   <!--o atributo name: agendamento que está no AgendamentoController referencia o objeto da classe Agendamento e os valores que são passados nos campos abaixo, assim que submeter(enviar) vão ser passados nas variáveis da classe Agendamento.-->
-            <p>Nome <input type="text" required th:field="${agendamento.nome}"></p>
-            <p>Telefone <input type="text" required th:field="${agendamento.telefone}"></p>
-            <p>Data <input type="date" name="data" required th:field="${agendamento.data}"></p>
+        <div class="container-fundo">
             
-            <label for="hora">Hora</label>
-            <select name="hora" th:field="${agendamento.hora}">
-                <option value="9:00">9:00</option>
-                <option value="9:30">9:30</option>
-                <option value="10:00">10:00</option>
-                <option value="10:30">10:30</option>
-                <option value="11:00">11:00</option>
-                <option value="11:30">11:30</option>
-                <option value="13:30">13:30</option>
-                <option value="14:00">14:00</option>
-                <option value="14:30">14:30</option>
-                <option value="15:00">15:00</option>
-                <option value="16:00">16:00</option>
-                <option value="16:30">16:30</option>
-                <option value="17:00">17:00</option>
-            </select>             
-            
-            <label for="barbeiro_responsavel">Barbeiro Responsável</label>
-            <select name="barbeiro_responsavel" th:field="${agendamento.barbeiro_resp}">
-                <option value="Sem preferencia">Sem prefência</option>
-                <option value="Carlos">Carlos</option>
-                <option value="Plinio">Plínio</option>
-            </select>
-            
-            <h2>Serviços:</h2>
-            <p><label><input type="checkbox" name="servico" id="cabelo" th:field="${agendamento.cabelo}" /> Cabelo</label></p>
-            <p><label><input type="checkbox" name="servico" id="barba" th:field="${agendamento.barba}" /> Barba</label></p>
-            <p><label><input type="checkbox" name="servico" id="sobrancelha" th:field="${agendamento.sobrancelha}" /> Sobrancelha</label></p>
-            <p><label><input type="checkbox" name="servico" id="hidratacao" th:field="${agendamento.hidratacao}" /> Hidratação</label></p>
-            <p><label><input type="checkbox" name="servico" id="tintura" th:field="${agendamento.tintura}" /> Tintura</label></p>
-            
-            <input type="hidden" th:field="${agendamento.id}">
-            <p><input type="submit" value="Enviar"></p>
-        </form>
-        
-        <a th:href="@{/inicio}">Ir para a TELA INICIAL</a>
-        
-        
+            <h1 class="titulo" th:if="${agendamento.id}">Editar Agendamento</h1>       <!--Se o agendamento tem id(existe), vai ser alteração (aparece o texto: Editar Agendamento)-->
+            <h1 class="titulo" th:unless="${agendamento.id}">Tela de Agendamento</h1>    <!--Se o agendamento não tem id, então ele não existe e vai ser criado (aparece o texto Tela de Agendamento) -->
+
+            <!--Criar o formulário de agendamento-->
+            <form class="corpo" onsubmit="return validarServicos()" th:action="@{/gravar}" method="POST" th:object="${agendamento}">   <!--o atributo name: agendamento que está no AgendamentoController referencia o objeto da classe Agendamento e os valores que são passados nos campos abaixo, assim que submeter(enviar) vão ser passados nas variáveis da classe Agendamento.-->
+                <p>Nome <input type="text" required th:field="${agendamento.nome}" placeholder="Nome do cliente"></p>
+                <p>Telefone <input type="text" required th:field="${agendamento.telefone}" placeholder="31912345678" minlength="11" maxlength="11"></p>
+                <p>Data <input type="date" name="data" required th:field="${agendamento.data}"></p>
+
+                <label for="hora">Hora</label>
+                <select name="hora" th:field="${agendamento.hora}">
+                    <option value="9:00">9:00</option>
+                    <option value="9:30">9:30</option>
+                    <option value="10:00">10:00</option>
+                    <option value="10:30">10:30</option>
+                    <option value="11:00">11:00</option>
+                    <option value="11:30">11:30</option>
+                    <option value="13:30">13:30</option>
+                    <option value="14:00">14:00</option>
+                    <option value="14:30">14:30</option>
+                    <option value="15:00">15:00</option>
+                    <option value="16:00">16:00</option>
+                    <option value="16:30">16:30</option>
+                    <option value="17:00">17:00</option>
+                </select>             
+
+                <label for="barbeiro_responsavel">Barbeiro Responsável</label>
+                <select name="barbeiro_responsavel" th:field="${agendamento.barbeiro_resp}">
+                    <option value="Sem preferencia">Sem prefência</option>
+                    <option value="Carlos">Carlos</option>
+                    <option value="Plinio">Plínio</option>
+                </select>
+
+                <h3>Serviços:</h3>
+                <p><label><input type="checkbox" name="servico" id="cabelo" th:field="${agendamento.cabelo}" /> Cabelo</label></p>
+                <p><label><input type="checkbox" name="servico" id="barba" th:field="${agendamento.barba}" /> Barba</label></p>
+                <p><label><input type="checkbox" name="servico" id="sobrancelha" th:field="${agendamento.sobrancelha}" /> Sobrancelha</label></p>
+                <p><label><input type="checkbox" name="servico" id="hidratacao" th:field="${agendamento.hidratacao}" /> Hidratação</label></p>
+                <p><label><input type="checkbox" name="servico" id="tintura" th:field="${agendamento.tintura}" /> Tintura</label></p>
+
+                <input type="hidden" th:field="${agendamento.id}">
+                <p><input class="botao-enviar-form" type="submit" value="Enviar"></p>
+            </form>
+
+            <a th:href="@{/inicio}">Ir para a TELA INICIAL</a>
+
+        </div>
         <!-- Carregar o arquivo JavaScript -->
         <script src="/javascript/validacoes_operacoes.js"></script>
     </body>

@@ -16,10 +16,17 @@ public class EstoqueService {
     
         double valor_total;
         
-        valor_total = valor_1 * valor_2;
-        
+        if(valor_1 == 0){ //se a quantidade for 0 então não pode multiplicar pois o valor total daria 0
+            valor_total = valor_1 + valor_2; //Nesse caso deve-se somar quantidade com preço unitario
+        }
+        else{
+            valor_total = valor_1 * valor_2;
+        }
         return valor_total;
         
     }
+    
+    
+    
     
 }

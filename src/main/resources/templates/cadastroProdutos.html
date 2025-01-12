@@ -4,41 +4,48 @@
     <title>Cadastro de produtos</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--link pra carregar o CSS-->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/estilo.css}"/>
 </head>
-<body>
-    <h1 th:if="${estoque.id}">Editar Item do Estoque</h1>       
-    <h1 th:unless="${estoque.id}">Cadastro de Produtos</h1>    
+<body class="pagina-cadastro">
+    <div class="imagem-multiplicada">
+    </div>
+    
+    <div class="container-fundo">
+        
+        <h1 class="titulo" th:if="${estoque.id}">Editar Item do Estoque</h1>       
+        <h1 class="titulo" th:unless="${estoque.id}">Cadastro de Produtos</h1>    
         
         <!--Criar o formulário de Cadastro de Produtos-->
-        <form th:action="@{/gravar-produtos}" method="POST" th:object="${estoque}">   <!--o atributo name: agendamento que está no AgendamentoController referencia o objeto da classe Agendamento e os valores que são passados nos campos abaixo, assim que submeter(enviar) vão ser passados nas variáveis da classe Agendamento.-->
-            <p>*Nome <input type="text" required th:field="${estoque.nome}"></p>
+        <form class="corpo" onsubmit="return impedirValoresNegativos()" th:action="@{/gravar-produtos}" method="POST" th:object="${estoque}">   <!--o atributo name: agendamento que está no AgendamentoController referencia o objeto da classe Agendamento e os valores que são passados nos campos abaixo, assim que submeter(enviar) vão ser passados nas variáveis da classe Agendamento.-->
+            <p>*Nome <input type="text" required th:field="${estoque.nome}" placeholder="Nome do produto"></p>
             
             <label for="categoria">*Categoria</label>
             <select name="categoria" th:field="${estoque.categoria}">
-                <option value="cuidadospessoais">Cuidados Pessoais</option>
-                <option value="vestuario">Vestuário</option>
-                <option value="esporteelaser">Esporte e Laser</option>
-                <option value="acessorios">Acessórios</option>
-                <option value="produtosinfantis">Produtos Infantis</option>
-                <option value="decoracao">Decoração</option>
+                <option value="Cuidados Pessoais">Cuidados Pessoais</option>
+                <option value="Vestuário">Vestuário</option>
+                <option value="Esporte e Laser">Esporte e Laser</option>
+                <option value="Acessórios">Acessórios</option>
+                <option value="Produtos Infantis">Produtos Infantis</option>
+                <option value="Decoração">Decoração</option>
             </select> 
             
-            <p>*Quantidade <input type="number" name="numero" required th:field="${estoque.quantidade}"></p>
-            <p>*Preço Unitário <input type="text" name="precounitario" required th:field="${estoque.preco}"></p>
+            <p>*Quantidade <input type="number" name="numero" id="quantidade" required th:field="${estoque.quantidade}" placeholder="50"></p>
+            <p>*Preço Unitário <input type="text" name="precounitario" id="precounitario" required th:field="${estoque.preco}" placeholder="10.00"></p>
             <p>*Data da Compra <input type="date" name="datacompra" required th:field="${estoque.data_compra}"></p>
             <p>Validade <input type="date" name="validade" th:field="${estoque.validade}"></p>
-            <label for="observacao">Observacao</label>
-            <textarea id="observacao" name="observacao" rows="5" cols="20" th:field="${estoque.observacao}"></textarea>
+            <label for="observacao">Observação</label>
+            <textarea id="observacao" name="observacao" rows="5" cols="20" th:field="${estoque.observacao}" placeholder="Descreva algo sobre o produto"></textarea>
             
             
             <input type="hidden" th:field="${estoque.id}">
-            <p><input type="submit" value="Enviar"></p>
+            <p><input class="botao-enviar-form" type="submit" value="Enviar"></p>
         </form>
         
         <a th:href="@{/inicio}">Ir para a TELA INICIAL</a>
         
-        
-        <!-- Carregar o arquivo JavaScript -->
-        <script src="/javascript/validacoes_operacoes.js"></script>
+    </div>
+    <!-- Carregar o arquivo JavaScript -->
+    <script src="/javascript/validacoes_operacoes.js"></script>
     </body>
 </html>
