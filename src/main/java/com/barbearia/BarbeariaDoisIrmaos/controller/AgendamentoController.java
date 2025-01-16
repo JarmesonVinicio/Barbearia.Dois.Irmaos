@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller //precisa especificar que é uma classe de controler para que ele entenda que é de controle e não uma classe normal
 public class AgendamentoController {
     
-    private List<Agendamento> listaAgendamentos = new ArrayList<>();
+     @Autowired
+     AgendamentoService agendamentoService;
+    
     
     @GetMapping("/") //aqui é definido o nome da rota que a URL sera chamada no navegador de internet
     public String inicio(){ //apenas o nome do método
@@ -35,29 +37,12 @@ public class AgendamentoController {
     
     @PostMapping("/gravar")
     public String processarFormulario(@ModelAttribute Agendamento agendamento, Model model){ //receber os dados do formulário e salva numa lista de agendamentos
-        if (agendamento.getId() != null){ //se for diferente de nulo, ele atualiza
-            for(Agendamento a: listaAgendamentos){
-            if(a.getId()== agendamento.getId()){ //esse id se refere ao id hidden (campo invisível) do HTML cadastro. 
-                a.setNome(agendamento.getNome());
-                a.setTelefone(agendamento.getTelefone());
-                a.setData(agendamento.getData());
-                a.setHora(agendamento.getHora());
-                a.setBarbeiro_resp(agendamento.getBarbeiro_resp());
-                a.setCabelo(agendamento.getCabelo());
-                a.setBarba(agendamento.getBarba());
-                a.setSobrancelha(agendamento.getSobrancelha());
-                a.setHidratacao(agendamento.getHidratacao());
-                a.setTintura(agendamento.getTintura());
-                
-                break;
-            }
+        
+        if(agendamento.getId() != null){ //se for diferente de nulo, é pra editar
+            agendamentoService.atualizar(agendamento.getId(), agendamento);
         }
-            
-        }
-        else{
-            agendamento.setId(listaAgendamentos.size() + 1); //adicionando ID
-//            livro.setLido(false); //informando que ele não foi lido (informação default)
-            listaAgendamentos.add(agendamento); //INSERIR NA LISTA
+        else{ //se for nulo é pra cadastrar
+            agendamentoService.criar(agendamento);
         }
         return "redirect:/listagem"; //chamar a listagem dos agendamentos salvos
     }
@@ -65,33 +50,15 @@ public class AgendamentoController {
     @GetMapping("/listagem")
     public String listaForm(Model model){
         
-        model.addAttribute("lista", listaAgendamentos);
+        model.addAttribute("lista", agendamentoService.buscarTodos());
         return "listagem";
     }
-    
-    
-//    @GetMapping("/exibir")
-//    public String mostrarDetalhes(Model model, @RequestParam String id){ //recebendo o id de fora(da listagem.html, quando o link for clicado)
-//        Integer idAgendamento = Integer.parseInt(id); //convertendo o Sting id que veio de fora para inteiro)
-//        
-//        Agendamento registroEncontrado = new Agendamento(); //criando um objeto vazio de Agendamento, que será passado para o model.addAttribute
-//        for(Agendamento a: listaAgendamentos){ //a representa a propria listaAgendamentos que esta preenchida com varios atributos de Agendamento(ex:nome,telefone, data,hora, etc)
-//            if(a.getId()== idAgendamento){ //verificando se a cada ITERAÇÃO feita pelo looping for, se o ID da LISTA é o mesmo que foi recebido de fora(id da listagem, o do parametro)
-//                registroEncontrado = a; //SE FOR O MESMO, ele pega todos os dados do objeto l naquela volta da iteração e atribui (preenche) no registroEncontrado. 
-//                break; //encontrou, então para o loop e sai dele
-//            }
-//        }
-//        
-//        model.addAttribute("agendamento", registroEncontrado); //com o objeto encontrado ele atribui ao name do model para ser usado em outra pagina HTML.
-//        return "exibir"; //chama o exibir.html
-//    }
-    
     
     @GetMapping("/alterar-agendamento")
     public String alterarAgendamento(Model model, @RequestParam String id){
         
         Integer idAgendamento = Integer.parseInt(id);
-        model.addAttribute("agendamento", obtemAgendamentoPeloId(idAgendamento));
+        model.addAttribute("agendamento", agendamentoService.buscarPorId(idAgendamento));
         return "cadastro";
     }
     
@@ -99,48 +66,25 @@ public class AgendamentoController {
     public String excluirAgendamento(Model model, @RequestParam String id){
         
         Integer idAgendamento = Integer.parseInt(id);
-        listaAgendamentos.remove(obtemAgendamentoPeloId(idAgendamento));
+        agendamentoService.excluir(idAgendamento);
         return "redirect:/listagem"; //chamar a listagem dos agendamentos salvos
     }
-        
-    public Agendamento obtemAgendamentoPeloId(Integer idAgendamento){
-        Agendamento registroEncontrado = new Agendamento();
-        for(Agendamento a: listaAgendamentos){
-            if(a.getId()== idAgendamento){
-                registroEncontrado = a;
-                break;
-            }
-        }
-        return registroEncontrado;
-    }
-    ////////////////////////////////////////////////////////////////////////////////////
-    @Autowired
-    private AgendamentoService agendamentoService;
-//    //Metódo para exibir o valor total
-//    @GetMapping("/exibir")
-//    public String valorAgendamento (Agendamento agendamento, Model model){
-//        if(agendamento != null){
-//            double valorTotal = agendamentoService.calcularValor(agendamento);
-//            //adicionar o valor total ao modelo
-//            model.addAttribute("valorTotal", valorTotal);
-//        }
-//        return "exibir";
-//    }
-    
     
     @GetMapping("/exibir") 
     public String mostrarDetalhes(@RequestParam String id, Model model) {
+        
         Integer idAgendamento = Integer.parseInt(id);
-        Agendamento registroEncontrado = obtemAgendamentoPeloId(idAgendamento);
-        if (registroEncontrado != null) {
-            model.addAttribute("agendamento", registroEncontrado);
-            double valorTotal = agendamentoService.calcularValor(registroEncontrado);
-            model.addAttribute("valorTotal", valorTotal);
-        }
+        model.addAttribute("agendamento", agendamentoService.buscarPorId(idAgendamento));
+        double valorTotal = agendamentoService.calcularValor(agendamentoService.buscarPorId(idAgendamento));
+        model.addAttribute("valorTotal", valorTotal);
+        
         return "exibir";
     }
     
     
+
+
+
 }
     
     
