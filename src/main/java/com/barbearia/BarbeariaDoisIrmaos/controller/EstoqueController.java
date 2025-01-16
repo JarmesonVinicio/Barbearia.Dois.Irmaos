@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class EstoqueController {
     
-    private List<Estoque> listaProdutos = new ArrayList<>();
+    @Autowired
+    private EstoqueService estoqueService;
+       
     
     @GetMapping("/home") //se o usuário digitar /inicio também é redirecionado para o menu iniciar
     public String home(){
@@ -31,39 +33,16 @@ public class EstoqueController {
     
     @PostMapping("/gravar-produtos")
     public String processarFormulario(@ModelAttribute Estoque estoque, Model model, @RequestParam String id){ //receber os dados do formulário e salva numa lista de produtos
-        if (estoque.getId() != null){ //se for diferente de nulo, ele atualiza
-            for(Estoque e: listaProdutos){
-            if(e.getId()== estoque.getId()){ //esse id se refere ao id hidden (campo invisível) do HTML estoque. 
-                e.setNome(estoque.getNome()); //pega o que esta na variavel estoque(que veio do html) e atualiza na lista (e)
-                e.setCategoria(estoque.getCategoria());
-                e.setQuantidade(estoque.getQuantidade());
-                e.setPreco(estoque.getPreco());
-                
-                
-                
-                double valorTotal = estoqueService.calcularValor(e.getQuantidade(), e.getPreco());
-                model.addAttribute("valorTotal", valorTotal);
-                e.setValor_total(valorTotal);
-                
-                
-                
-                e.setData_compra(estoque.getData_compra());
-                e.setValidade(estoque.getValidade());
-                e.setObservacao(estoque.getObservacao());
-                
-                break;
-            }
-        }
-            
-        }
-        else{
-            estoque.setId(listaProdutos.size() + 1); //adicionando ID
-            
+        
+        if(estoque.getId() != null){ //se for diferente de nulo, é pra editar
             double valorTotal = estoqueService.calcularValor(estoque.getQuantidade(), estoque.getPreco());
             estoque.setValor_total(valorTotal);
-            
-            
-            listaProdutos.add(estoque); //INSERIR NA LISTA
+            estoqueService.atualizar(estoque.getId(), estoque);
+        }
+        else{ //se for nulo é pra cadastrar
+            double valorTotal = estoqueService.calcularValor(estoque.getQuantidade(), estoque.getPreco());
+            estoque.setValor_total(valorTotal);
+            estoqueService.criar(estoque);
         }
         return "redirect:/listagem-produtos"; //chamar a listagem dos produtos salvos
     }
@@ -71,7 +50,7 @@ public class EstoqueController {
     @GetMapping("/listagem-produtos")
     public String listaForm(Model model){
         
-        model.addAttribute("lista", listaProdutos);
+        model.addAttribute("lista", estoqueService.buscarTodos());
         return "listagemProdutos";
     }
     
@@ -79,7 +58,7 @@ public class EstoqueController {
     public String alterarProduto(Model model, @RequestParam String id){
         
         Integer idProduto = Integer.parseInt(id);
-        model.addAttribute("estoque", obtemProdutoPeloId(idProduto));
+        model.addAttribute("estoque", estoqueService.buscarPorId(idProduto));
         return "cadastroProdutos";
     }
     
@@ -87,33 +66,15 @@ public class EstoqueController {
     public String excluirProduto(Model model, @RequestParam String id){
         
         Integer idProduto = Integer.parseInt(id);
-        listaProdutos.remove(obtemProdutoPeloId(idProduto));
+        estoqueService.excluir(idProduto);
         return "redirect:/listagem-produtos"; //chamar a listagem dos produtos salvos
     }
-        
-    public Estoque obtemProdutoPeloId(Integer idProduto){
-        Estoque registroEncontrado = new Estoque();
-        for(Estoque e: listaProdutos){
-            if(e.getId()== idProduto){
-                registroEncontrado = e;
-                break;
-            }
-        }
-        return registroEncontrado;
-    }
-    
-    @Autowired
-    private EstoqueService estoqueService;
     
     @GetMapping("/exibir-produto") 
     public String mostrarDetalhes(@RequestParam String id, Model model) {
+        
         Integer idProduto = Integer.parseInt(id);
-        Estoque registroEncontrado = obtemProdutoPeloId(idProduto);
-        if (registroEncontrado != null) {
-            model.addAttribute("estoque", registroEncontrado);
-//            double valorTotal = estoqueService.calcularValor(registroEncontrado);
-//            model.addAttribute("valorTotal", valorTotal);
-        }
+        model.addAttribute("estoque", estoqueService.buscarPorId(idProduto));
         return "exibirProduto";
     }
     

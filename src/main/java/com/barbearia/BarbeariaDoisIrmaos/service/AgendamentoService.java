@@ -40,6 +40,11 @@ public class AgendamentoService {
         agendamentoEncontrado.setData(agendamento.getData());
         agendamentoEncontrado.setHora(agendamento.getHora());
         agendamentoEncontrado.setBarbeiro_resp(agendamento.getBarbeiro_resp());
+        agendamentoEncontrado.setCabelo(agendamento.getCabelo());
+        agendamentoEncontrado.setBarba(agendamento.getBarba());
+        agendamentoEncontrado.setSobrancelha(agendamento.getSobrancelha());
+        agendamentoEncontrado.setHidratacao(agendamento.getHidratacao());
+        agendamentoEncontrado.setTintura(agendamento.getTintura());
         agendamentoRepository.save(agendamentoEncontrado);
         return agendamentoEncontrado;
     } 
