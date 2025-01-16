@@ -22,13 +22,24 @@ function impedirValoresNegativos() {
     let precounitario = document.getElementById("precounitario");
     
     let q = parseInt(quantidade.value);
-    let p = parseInt(precounitario.value);
-    console.log(q);
-    console.log(p);
+    let p = parseFloat(precounitario.value);
     
     
-    if(q < 0 || p <= 0){ //quantidade não pode ser valor negativo e preco não pode ser zero e nem negativo
-        alert("Quantidade não pode ter valor menor do que zero\nPreço unitário não pode ter valor menor ou igual a zero");
+//    if(q < 0 || p <= 0){ //quantidade não pode ser valor negativo e preco não pode ser zero e nem negativo
+//        alert("Quantidade não pode ter valor menor do que zero\nPreço unitário não pode ter valor menor ou igual a zero");
+//        return false; // Impede o envio do formulário
+//    }
+
+    // Verifica se os campos são válidos
+    if (isNaN(q) || q < 0) { // Verifica se a quantidade é número válido e não negativo
+        alert("A quantidade deve ser um número válido e não pode ser menor que zero.");
+        quantidade.focus();
+        return false; // Impede o envio do formulário
+    }
+
+    if (isNaN(p) || p <= 0) { // Verifica se o preço unitário é número válido e maior que zero
+        alert("O preço unitário deve ser um número válido e maior que zero.");
+        precounitario.focus();
         return false; // Impede o envio do formulário
     }
     return true; // Permite o envio do formulário
